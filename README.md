@@ -1,4 +1,3 @@
-[html code для калькулятора index.html](https://github.com/user-attachments/files/27385413/html.code.index.html)
 <!DOCTYPE html>
 <html lang="ru">
 <head>
