@@ -244,7 +244,6 @@
         { name: "Трубка K-FLEX PE 06x012-2 FRIGO", unit: "м", price: 11.5 },
         { name: "Трубка K-FLEX PE 06x015-2 FRIGO", unit: "м", price: 13.6 },
         { name: "Трубка K-FLEX PE 06x018-2 FRIGO", unit: "м", price: 15 },
-        // удалён дубликат 06x022-2 с ценой 16.5, оставлен только с ценой 18.5 (ниже)
         { name: "Трубка K-FLEX PE 06x022-2 FRIGO", unit: "м", price: 18.5 },
         { name: "Пенофол Black Тип C, толщ. 10, шир. 600, дл. 15", unit: "м", price: 255 },
         { name: "Пенофол Black Тип C, толщ. 5, шир. 600, дл. 30", unit: "м", price: 175 },
