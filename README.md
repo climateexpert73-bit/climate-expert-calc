@@ -1,17 +1,175 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title></title>
 <style type="text/css">:root {
-            --primary: #0d47a1;
-            --primary-light: #e3f2fd;
-            --accent: #d32f2f;
-            --success: #2e7d32;
-            --text-main: #2c3e50;
-            --text-muted: #636e72;
-            --bg-body: #f0f2f5;
-            --white: #ffffff;
-            --border: #dcdde1;
-            --radius: 10px;
-            --shadow: 0 10px 25px rgba(0,0,0,0.05);
+:root {
+    --primary: #0d47a1;
+    --primary-light: #e3f2fd;
+    --accent: #d32f2f;
+    --success: #2e7d32;
+    --text-main: #2c3e50;
+    --text-muted: #636e72;
+    --bg-body: #f0f2f5;
+    --white: #ffffff;
+    --border: #dcdde1;
+    --radius: 10px;
+    --shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+.main-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--white);
+    padding: 40px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    position: relative;
+}
+header {
+    text-align: center;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 20px;
+    margin-bottom: 35px;
+}
+header h1 { color: var(--primary); font-size: 28px; margin: 0 0 5px; text-transform: uppercase; }
+header p { color: var(--accent); font-weight: 800; margin: 0; font-size: 14px; }
+.catalog-manager {
+    background: var(--primary-light);
+    padding: 20px;
+    border-radius: var(--radius);
+    margin-bottom: 30px;
+    border: 1px solid var(--border);
+}
+.manager-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto auto;
+    gap: 10px;
+    align-items: flex-end;
+}
+/* ИСПРАВЛЕНО: Разрешаем выпадающему списку выходить за пределы таблицы */
+.table-wrapper { 
+    overflow: visible; 
+    margin-bottom: 20px; 
+}
+.calc-table { width: 100%; border-collapse: collapse; }
+.calc-table th {
+    background-color: #f8f9fa;
+    color: var(--primary);
+    text-align: left;
+    padding: 15px;
+    font-size: 13px;
+    border-bottom: 2px solid var(--border);
+}
+.calc-table td { padding: 12px 10px; border-bottom: 1px solid #eee; position: relative; }
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+.autocomplete-container { position: relative; width: 100%; }
+/* ИСПРАВЛЕНО: Подняли слой подсказок на самый верх (z-index: 9999) */
+.suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid var(--primary);
+    z-index: 9999;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    display: none;
+    border-radius: 0 0 6px 6px;
+}
+.suggestion-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    white-space: normal; 
+    line-height: 1.4;
+    color: #2d3436;
+}
+.suggestion-item:hover { background-color: #f1f7ff; color: var(--primary); font-weight: 500; }
+.unit-cell { color: var(--text-muted); font-size: 13px; text-align: center; }
+.sum-cell { color: var(--accent); font-weight: 700; text-align: right; font-size: 16px; }
+.btn {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    padding: 12px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+.btn-add-row { background-color: var(--primary); color: white; margin-bottom: 20px; }
+.btn-save { background-color: var(--success); color: white; }
+.btn-delete { background: none; color: #b2bec3; font-size: 18px; cursor: pointer; }
+.btn-delete:hover { color: var(--accent); }
+/* ИСПРАВЛЕНО: Опустили слой панели ИТОГО под подсказки (z-index: 90) */
+.sticky-footer-panel {
+    position: sticky;
+    bottom: 20px;
+    background: var(--text-main);
+    color: white;
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: 0 -5px 25px rgba(0,0,0,0.15);
+    margin-top: 40px;
+    z-index: 90;
+}
+.footer-flex { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+.total-amount { font-size: 32px; font-weight: 800; color: #f1c40f; }
+#database-list {
+    margin-top: 15px;
+    max-height: 350px;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 6px;
+    display: none;
+    border: 1px solid var(--border);
+    padding: 10px;
+}
+.db-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
+}
+.db-item input {
+    width: 90px;
+    padding: 5px;
+}
+.btn-sm {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+@media (max-width: 850px) {
+    .manager-grid { grid-template-columns: 1fr; }
+    .calc-table thead { display: none; }
+    .calc-table tr { display: block; border: 1px solid var(--border); margin-bottom: 15px; padding: 10px; border-radius: 8px; }
+    .calc-table td { display: flex; justify-content: space-between; align-items: center; border: none; padding: 5px 0; }
+    .calc-table td::before { content: attr(data-label); font-weight: bold; font-size: 12px; color: var(--primary); margin-right: 10px; }
+}
         }
         body {
             font-family: 'Segoe UI', Roboto, sans-serif;
