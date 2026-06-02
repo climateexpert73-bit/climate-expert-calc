@@ -58,7 +58,9 @@
         }
         .table-wrapper { 
             overflow: visible; 
-            margin-bottom: 20px; 
+            margin-bottom: 20px;
+            height: auto;
+            max-height: none;
         }
         .calc-table { width: 100%; border-collapse: collapse; }
         .calc-table th {
@@ -71,12 +73,9 @@
         }
         .calc-table td { padding: 12px 10px; border-bottom: 1px solid #eee; position: relative; }
         input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
+            width: 100%; 
+            border-collapse: collapse; 
+            overflow: visible;
         }
         .autocomplete-container { position: relative; width: 100%; }
         .suggestions-list {
