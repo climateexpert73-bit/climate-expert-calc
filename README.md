@@ -319,10 +319,10 @@
     ];
 
     // инициализация локального хранилища для каталога (при первом запуске)
-    if (!localStorage.getItem('ce_catalog_v3')) {
-        localStorage.setItem('ce_catalog_v3', JSON.stringify(initialPriceList));
+    if (!localStorage.getItem('ce_catalog_v4')) {
+        localStorage.setItem('ce_catalog_v4', JSON.stringify(initialPriceList));
     }
-    let priceListData = JSON.parse(localStorage.getItem('ce_catalog_v3'));
+    let priceListData = JSON.parse(localStorage.getItem('ce_catalog_v4'));
 
     // вспомогательная функция для безопасного преобразования строки в число (замена запятой)
     function parseNumberSafe(val) {
@@ -334,7 +334,7 @@
 
     // сохранение каталога
     function saveCatalogToLocal() {
-        localStorage.setItem('ce_catalog_v3', JSON.stringify(priceListData));
+        localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
     }
 
     // сохранение строк таблицы
@@ -351,7 +351,7 @@
                 });
             }
         });
-        localStorage.setItem('ce_calc_rows_v3', JSON.stringify(rows));
+        localStorage.setItem('ce_calc_rows_v4', JSON.stringify(rows));
     }
 
     // пересчёт итогов
@@ -588,7 +588,7 @@
 
     // загрузка сохранённых строк при старте
     window.onload = () => {
-        const savedRows = JSON.parse(localStorage.getItem('ce_calc_rows_v3'));
+        const savedRows = JSON.parse(localStorage.getItem('ce_calc_rows_v4'));
         if (savedRows && savedRows.length > 0) {
             savedRows.forEach(s => addRow(s));
         } else {
