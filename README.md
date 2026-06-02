@@ -1,175 +1,22 @@
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title></title>
-<style type="text/css">:root {
-:root {
-    --primary: #0d47a1;
-    --primary-light: #e3f2fd;
-    --accent: #d32f2f;
-    --success: #2e7d32;
-    --text-main: #2c3e50;
-    --text-muted: #636e72;
-    --bg-body: #f0f2f5;
-    --white: #ffffff;
-    --border: #dcdde1;
-    --radius: 10px;
-    --shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-body {
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--bg-body);
-    color: var(--text-main);
-    margin: 0;
-    padding: 20px;
-    line-height: 1.6;
-}
-.main-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    background: var(--white);
-    padding: 40px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    position: relative;
-}
-header {
-    text-align: center;
-    border-bottom: 3px solid var(--primary);
-    padding-bottom: 20px;
-    margin-bottom: 35px;
-}
-header h1 { color: var(--primary); font-size: 28px; margin: 0 0 5px; text-transform: uppercase; }
-header p { color: var(--accent); font-weight: 800; margin: 0; font-size: 14px; }
-.catalog-manager {
-    background: var(--primary-light);
-    padding: 20px;
-    border-radius: var(--radius);
-    margin-bottom: 30px;
-    border: 1px solid var(--border);
-}
-.manager-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr auto auto;
-    gap: 10px;
-    align-items: flex-end;
-}
-/* ИСПРАВЛЕНО: Разрешаем выпадающему списку выходить за пределы таблицы */
-.table-wrapper { 
-    overflow: visible; 
-    margin-bottom: 20px; 
-}
-.calc-table { width: 100%; border-collapse: collapse; }
-.calc-table th {
-    background-color: #f8f9fa;
-    color: var(--primary);
-    text-align: left;
-    padding: 15px;
-    font-size: 13px;
-    border-bottom: 2px solid var(--border);
-}
-.calc-table td { padding: 12px 10px; border-bottom: 1px solid #eee; position: relative; }
-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-size: 14px;
-}
-.autocomplete-container { position: relative; width: 100%; }
-/* ИСПРАВЛЕНО: Подняли слой подсказок на самый верх (z-index: 9999) */
-.suggestions-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid var(--primary);
-    z-index: 9999;
-    max-height: 300px;
-    overflow-y: auto;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    display: none;
-    border-radius: 0 0 6px 6px;
-}
-.suggestion-item {
-    padding: 12px 15px;
-    cursor: pointer;
-    font-size: 13px;
-    border-bottom: 1px solid #f0f0f0;
-    white-space: normal; 
-    line-height: 1.4;
-    color: #2d3436;
-}
-.suggestion-item:hover { background-color: #f1f7ff; color: var(--primary); font-weight: 500; }
-.unit-cell { color: var(--text-muted); font-size: 13px; text-align: center; }
-.sum-cell { color: var(--accent); font-weight: 700; text-align: right; font-size: 16px; }
-.btn {
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    padding: 12px 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: 0.2s;
-}
-.btn-add-row { background-color: var(--primary); color: white; margin-bottom: 20px; }
-.btn-save { background-color: var(--success); color: white; }
-.btn-delete { background: none; color: #b2bec3; font-size: 18px; cursor: pointer; }
-.btn-delete:hover { color: var(--accent); }
-/* ИСПРАВЛЕНО: Опустили слой панели ИТОГО под подсказки (z-index: 90) */
-.sticky-footer-panel {
-    position: sticky;
-    bottom: 20px;
-    background: var(--text-main);
-    color: white;
-    padding: 20px;
-    border-radius: var(--radius);
-    box-shadow: 0 -5px 25px rgba(0,0,0,0.15);
-    margin-top: 40px;
-    z-index: 90;
-}
-.footer-flex { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
-.total-amount { font-size: 32px; font-weight: 800; color: #f1c40f; }
-#database-list {
-    margin-top: 15px;
-    max-height: 350px;
-    overflow-y: auto;
-    background: #fff;
-    border-radius: 6px;
-    display: none;
-    border: 1px solid var(--border);
-    padding: 10px;
-}
-.db-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    border-bottom: 1px solid #eee;
-    font-size: 13px;
-}
-.db-item input {
-    width: 90px;
-    padding: 5px;
-}
-.btn-sm {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-@media (max-width: 850px) {
-    .manager-grid { grid-template-columns: 1fr; }
-    .calc-table thead { display: none; }
-    .calc-table tr { display: block; border: 1px solid var(--border); margin-bottom: 15px; padding: 10px; border-radius: 8px; }
-    .calc-table td { display: flex; justify-content: space-between; align-items: center; border: none; padding: 5px 0; }
-    .calc-table td::before { content: attr(data-label); font-weight: bold; font-size: 12px; color: var(--primary); margin-right: 10px; }
-}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Калькулятор расходных материалов</title>
+    <style type="text/css">
+        :root {
+            --primary: #0d47a1;
+            --primary-light: #e3f2fd;
+            --accent: #d32f2f;
+            --success: #2e7d32;
+            --text-main: #2c3e50;
+            --text-muted: #636e72;
+            --bg-body: #f0f2f5;
+            --white: #ffffff;
+            --border: #dcdde1;
+            --radius: 10px;
+            --shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
         body {
             font-family: 'Segoe UI', Roboto, sans-serif;
@@ -209,7 +56,10 @@ input {
             gap: 10px;
             align-items: flex-end;
         }
-        .table-wrapper { overflow: visible; margin-bottom: 20px; }
+        .table-wrapper { 
+            overflow: visible; 
+            margin-bottom: 20px; 
+        }
         .calc-table { width: 100%; border-collapse: collapse; }
         .calc-table th {
             background-color: #f8f9fa;
@@ -321,56 +171,59 @@ input {
             .calc-table td { display: flex; justify-content: space-between; align-items: center; border: none; padding: 5px 0; }
             .calc-table td::before { content: attr(data-label); font-weight: bold; font-size: 12px; color: var(--primary); margin-right: 10px; }
         }
-</style>
+    </style>
+</head>
+<body>
+
 <main class="main-container">
-<header>
-<h1>Калькулятор расходных материалов</h1>
+    <header>
+        <h1>Калькулятор расходных материалов</h1>
+        <p>ИНЖЕНЕРНО-СТРОИТЕЛЬНЫЙ ХОЛДИНГ &laquo;КЛИМАТ-ЭКСПЕРТ&raquo;</p>
+    </header>
 
-<p>ИНЖЕНЕРНО-СТРОИТЕЛЬНЫЙ ХОЛДИНГ &laquo;КЛИМАТ-ЭКСПЕРТ&raquo;</p>
-</header>
+    <section class="catalog-manager">
+        <h3 style="margin:0 0 15px 0; font-size: 16px; color: var(--primary);">📦 База данных (каталог)</h3>
+        <div class="manager-grid">
+            <div><input id="new-item-name" placeholder="Название товара" type="text" /></div>
+            <div><input id="new-item-unit" placeholder="Ед. (м/шт)" type="text" /></div>
+            <div><input id="new-item-price" placeholder="Цена" step="0.01" type="number" /></div>
+            <button class="btn btn-save" onclick="addNewProduct()">Сохранить</button>
+            <button class="btn" onclick="toggleDbList()" style="background: #95a5a6; color: white;">Все товары</button>
+        </div>
+        <div id="database-list"></div>
+    </section>
 
-<section class="catalog-manager">
-<h3 style="margin:0 0 15px 0; font-size: 16px; color: var(--primary);">📦 База данных (каталог)</h3>
+    <button class="btn btn-add-row" onclick="addRow()">+ Добавить позицию</button>
 
-<div class="manager-grid">
-<div><input id="new-item-name" placeholder="Название товара" type="text" /></div>
+    <div class="table-wrapper">
+        <table class="calc-table">
+            <thead>
+                <tr>
+                    <th style="width: 45%;">Товар</th>
+                    <th style="width: 10%; text-align: center;">Ед.</th>
+                    <th style="width: 15%;">Кол-во</th>
+                    <th style="width: 15%;">Цена</th>
+                    <th style="width: 15%; text-align: right;">Сумма</th>
+                    <th style="width: 5%;">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
 
-<div><input id="new-item-unit" placeholder="Ед. (м/шт)" type="text" /></div>
-
-<div><input id="new-item-price" placeholder="Цена" step="0.01" type="number" /></div>
-<button class="btn btn-save" onclick="addNewProduct()">Сохранить</button><button class="btn" onclick="toggleDbList()" style="background: #95a5a6; color: white;">Все товары</button></div>
-
-<div id="database-list">&nbsp;</div>
-</section>
-<button class="btn btn-add-row" onclick="addRow()">+ Добавить позицию</button>
-
-<div class="table-wrapper">
-<table class="calc-table">
-	<thead>
-		<tr>
-			<th style="width: 45%;">Товар</th>
-			<th style="width: 10%; text-align: center;">Ед.</th>
-			<th style="width: 15%;">Кол-во</th>
-			<th style="width: 15%;">Цена</th>
-			<th style="width: 15%; text-align: right;">Сумма</th>
-			<th style="width: 5%;">&nbsp;</th>
-		</tr>
-	</thead>
-	<tbody id="tableBody">
-	</tbody>
-</table>
-</div>
-
-<div class="sticky-footer-panel">
-<div class="footer-flex">
-<div><span style="opacity: 0.8;">ИТОГО:</span> <span class="total-amount" id="grandTotal">0.00 ₽</span></div>
-
-<div style="display: flex; gap: 10px;"><button class="btn" onclick="syncPricesFromCatalog()" style="background-color: #ff9800; color: white;">🔄 Обновить цены</button><button class="btn" onclick="clearAll()" style="background-color: #7f8c8d; color: white;">Очистить</button><button class="btn" onclick="copyToClipboard()" style="background-color: var(--success); color: white;">Скопировать</button></div>
-</div>
-</div>
+    <div class="sticky-footer-panel">
+        <div class="footer-flex">
+            <div><span style="opacity: 0.8;">ИТОГО:</span> <span class="total-amount" id="grandTotal">0.00 ₽</span></div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" onclick="syncPricesFromCatalog()" style="background-color: #ff9800; color: white;">🔄 Обновить цены</button>
+                <button class="btn" onclick="clearAll()" style="background-color: #7f8c8d; color: white;">Очистить</button>
+                <button class="btn" onclick="copyToClipboard()" style="background-color: var(--success); color: white;">Скопировать</button>
+            </div>
+        </div>
+    </div>
 </main>
+
 <script>
-    // ---------- 1. КАТАЛОГ (104 позиции, все цены с точкой, дубликаты удалены) ----------
     const initialPriceList = [
         { name: "Кабель-канал 'РУВИНИЛ' 74х55х2000мм", unit: "м", price: 232 },
         { name: "Прямой ввод в стену 'РУВИНИЛ' 74х55 мм.", unit: "шт.", price: 146 },
@@ -380,8 +233,8 @@ input {
         { name: "Переходник 'РУВИНИЛ' РКК-74х55 соединительный", unit: "шт.", price: 42 },
         { name: "Ввод в строение РКК-74х55 'РУВИНИЛ'", unit: "шт.", price: 230 },
         { name: "Заглушка для РКК-74х55 'РУВИНИЛ'", unit: "шт.", price: 112 },
-        { name: "Кабель-канал 100х60 L2000 пластик ЭЛЕКОР IEK", unit: "м", price: 263 },
-        { name: "Кабель канал 16х16 L2000 пластик ЭЛЕКОР IEK", unit: "м", price: 40 },
+        { name: "Кабель-канал 100х60 L2000 plastic ЭЛЕКОР IEK", unit: "м", price: 263 },
+        { name: "Кабель канал 16х16 L2000 plastic ЭЛЕКОР IEK", unit: "м", price: 40 },
         { name: "Медная труба 1/4 ASTM B68 УЗБЕКИСТАН", unit: "м", price: 144 },
         { name: "Медная труба 1/4 ASTM B280 (6,35х0,76)", unit: "м", price: 187 },
         { name: "Медная труба 3/8 ASTM B68 УЗБЕКИСТАН", unit: "м", price: 241 },
@@ -432,8 +285,8 @@ input {
         { name: "Скотч алюминиевый ALT 75", unit: "шт.", price: 233 },
         { name: "Скотч армированный серый", unit: "шт.", price: 375 },
         { name: "Изолента ПВХ 19мм*20м белая", unit: "шт.", price: 76 },
-        { name: "Дренаж гофрированный D 16 мм (30м)", unit: "шт", price: 785 },
-        { name: "Дренаж гофрированный D 20 мм (30м)", unit: "шт", price: 1500 },
+        { name: "Дренаж гофрированный D 16 мм (30м)", unit: "м", price: 25 },
+        { name: "Дренаж гофрированный D 20 мм (30м)", unit: "м", price: 48.5 },
         { name: "Дренаж металлопласт", unit: "м", price: 62 },
         { name: "Шланг капиллярный 6*9 (бухта 50м)", unit: "м", price: 2 },
         { name: "Регулятор давления конденсации РДК-8.4 (РДКК-33)", unit: "шт.", price: 1248 },
@@ -476,44 +329,38 @@ input {
         { name: "Развальцовочник", unit: "шт.", price: 1017 }
     ];
 
-    // инициализация локального хранилища для каталога (при первом запуске)
-    // ИСПРАВЛЕНО: Ключи обновлены до v4, чтобы заставит браузер обновить цены на актуальные из кода
-if (!localStorage.getItem('ce_catalog_v4')) {
-    localStorage.setItem('ce_catalog_v4', JSON.stringify(initialPriceList));
-}
-let priceListData = JSON.parse(localStorage.getItem('ce_catalog_v4'));
+    if (!localStorage.getItem('ce_catalog_v4')) {
+        localStorage.setItem('ce_catalog_v4', JSON.stringify(initialPriceList));
+    }
+    let priceListData = JSON.parse(localStorage.getItem('ce_catalog_v4'));
 
-// вспомогательная функция для безопасного преобразования строки в число (замена запятой)
-function parseNumberSafe(val) {
-    if (val === undefined || val === null) return 0;
-    let str = String(val).trim().replace(',', '.');
-    let num = parseFloat(str);
-    return isNaN(num) ? 0 : num;
-}
+    function parseNumberSafe(val) {
+        if (val === undefined || val === null) return 0;
+        let str = String(val).trim().replace(',', '.');
+        let num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+    }
 
-// ИСПРАВЛЕНО: Ключ обновлен до v4
-function saveCatalogToLocal() {
-    localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
-}
+    function saveCatalogToLocal() {
+        localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
+    }
 
-// ИСПРАВЛЕНО: Ключ обновлен до v4
-function saveRowsToLocal() {
-    const rows = [];
-    document.querySelectorAll('#tableBody tr').forEach(tr => {
-        const name = tr.querySelector('.name-input').value.trim();
-        if (name) {
-            rows.push({
-                name: name,
-                unit: document.getElementById(`unit-${tr.dataset.id}`).textContent,
-                qty: document.getElementById(`qty-${tr.dataset.id}`).value,
-                price: document.getElementById(`price-${tr.dataset.id}`).value
-            });
-        }
-    });
-    localStorage.setItem('ce_calc_rows_v4', JSON.stringify(rows));
-}
+    function saveRowsToLocal() {
+        const rows = [];
+        document.querySelectorAll('#tableBody tr').forEach(tr => {
+            const name = tr.querySelector('.name-input').value.trim();
+            if (name) {
+                rows.push({
+                    name: name,
+                    unit: document.getElementById(`unit-${tr.dataset.id}`).textContent,
+                    qty: document.getElementById(`qty-${tr.dataset.id}`).value,
+                    price: document.getElementById(`price-${tr.dataset.id}`).value
+                });
+            }
+        });
+        localStorage.setItem('ce_calc_rows_v4', JSON.stringify(rows));
+    }
 
-    // пересчёт итогов
     function calculate() {
         let grand = 0;
         document.querySelectorAll('#tableBody tr').forEach(tr => {
@@ -528,7 +375,6 @@ function saveRowsToLocal() {
         saveRowsToLocal();
     }
 
-    // автокомплит
     function handleSearch(id, query) {
         const listDiv = document.getElementById(`list-${id}`);
         listDiv.innerHTML = '';
@@ -558,7 +404,6 @@ function saveRowsToLocal() {
         calculate();
     }
 
-    // добавление строки (с возможностью восстановления сохранённой)
     function addRow(saved = null) {
         const id = 'id' + Math.random().toString(36).substr(2, 9);
         const tr = document.createElement('tr');
@@ -596,7 +441,6 @@ function saveRowsToLocal() {
         } 
     }
 
-    // добавление/обновление товара в каталоге
     function addNewProduct() {
         let name = document.getElementById('new-item-name').value.trim();
         let unit = document.getElementById('new-item-unit').value.trim() || 'шт.';
@@ -621,7 +465,6 @@ function saveRowsToLocal() {
         document.getElementById('new-item-price').value = '';
     }
 
-    // синхронизация цен и единиц в таблице по текущему каталогу
     function syncPricesFromCatalog() {
         const rows = document.querySelectorAll('#tableBody tr');
         let updated = 0;
@@ -650,7 +493,6 @@ function saveRowsToLocal() {
         }
     }
 
-    // отображение / редактирование каталога
     function toggleDbList() {
         const div = document.getElementById('database-list');
         if (div.style.display === 'block') {
@@ -704,7 +546,6 @@ function saveRowsToLocal() {
         }
     }
 
-    // вспомогательная функция для экранирования HTML
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -712,12 +553,9 @@ function saveRowsToLocal() {
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
             return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
         });
     }
 
-    // копирование в буфер
     function copyToClipboard() {
         let text = "🏢 Калькулятор материалов «Климат-Эксперт»\n\n";
         let hasData = false;
@@ -738,22 +576,21 @@ function saveRowsToLocal() {
         alert("Расчёт скопирован в буфер обмена!");
     }
 
-    // закрытие автокомплита при клике вне
     document.addEventListener('click', (e) => {
         if (!e.target.classList || !e.target.classList.contains('name-input')) {
             document.querySelectorAll('.suggestions-list').forEach(l => l.style.display = 'none');
         }
     });
 
-    // загрузка сохранённых строк при старте
-    // ИСПРАВЛЕНО: Ключ изменен на v4 в window.onload
-window.onload = () => {
-    const savedRows = JSON.parse(localStorage.getItem('ce_calc_rows_v4'));
-    if (savedRows && savedRows.length > 0) {
-        savedRows.forEach(s => addRow(s));
-    } else {
-        addRow(); // пустая строка для начала
-    }
-};
+    window.onload = () => {
+        const savedRows = JSON.parse(localStorage.getItem('ce_calc_rows_v4'));
+        if (savedRows && savedRows.length > 0) {
+            savedRows.forEach(s => addRow(s));
+        } else {
+            addRow();
+        }
     };
 </script>
+
+</body>
+</html>
