@@ -477,40 +477,41 @@ input {
     ];
 
     // инициализация локального хранилища для каталога (при первом запуске)
-    if (!localStorage.getItem('ce_catalog_v4')) {
-        localStorage.setItem('ce_catalog_v4', JSON.stringify(initialPriceList));
-    }
-    let priceListData = JSON.parse(localStorage.getItem('ce_catalog_v4'));
+    // ИСПРАВЛЕНО: Ключи обновлены до v4, чтобы заставит браузер обновить цены на актуальные из кода
+if (!localStorage.getItem('ce_catalog_v4')) {
+    localStorage.setItem('ce_catalog_v4', JSON.stringify(initialPriceList));
+}
+let priceListData = JSON.parse(localStorage.getItem('ce_catalog_v4'));
 
-    // вспомогательная функция для безопасного преобразования строки в число (замена запятой)
-    function parseNumberSafe(val) {
-        if (val === undefined || val === null) return 0;
-        let str = String(val).trim().replace(',', '.');
-        let num = parseFloat(str);
-        return isNaN(num) ? 0 : num;
-    }
+// вспомогательная функция для безопасного преобразования строки в число (замена запятой)
+function parseNumberSafe(val) {
+    if (val === undefined || val === null) return 0;
+    let str = String(val).trim().replace(',', '.');
+    let num = parseFloat(str);
+    return isNaN(num) ? 0 : num;
+}
 
-    // сохранение каталога
-    function saveCatalogToLocal() {
-        localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
-    }
+// ИСПРАВЛЕНО: Ключ обновлен до v4
+function saveCatalogToLocal() {
+    localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
+}
 
-    // сохранение строк таблицы
-    function saveRowsToLocal() {
-        const rows = [];
-        document.querySelectorAll('#tableBody tr').forEach(tr => {
-            const name = tr.querySelector('.name-input').value.trim();
-            if (name) {
-                rows.push({
-                    name: name,
-                    unit: document.getElementById(`unit-${tr.dataset.id}`).textContent,
-                    qty: document.getElementById(`qty-${tr.dataset.id}`).value,
-                    price: document.getElementById(`price-${tr.dataset.id}`).value
-                });
-            }
-        });
-        localStorage.setItem('ce_calc_rows_v4', JSON.stringify(rows));
-    }
+// ИСПРАВЛЕНО: Ключ обновлен до v4
+function saveRowsToLocal() {
+    const rows = [];
+    document.querySelectorAll('#tableBody tr').forEach(tr => {
+        const name = tr.querySelector('.name-input').value.trim();
+        if (name) {
+            rows.push({
+                name: name,
+                unit: document.getElementById(`unit-${tr.dataset.id}`).textContent,
+                qty: document.getElementById(`qty-${tr.dataset.id}`).value,
+                price: document.getElementById(`price-${tr.dataset.id}`).value
+            });
+        }
+    });
+    localStorage.setItem('ce_calc_rows_v4', JSON.stringify(rows));
+}
 
     // пересчёт итогов
     function calculate() {
