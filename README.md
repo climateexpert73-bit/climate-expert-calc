@@ -746,12 +746,14 @@ function saveRowsToLocal() {
     });
 
     // загрузка сохранённых строк при старте
-    window.onload = () => {
-        const savedRows = JSON.parse(localStorage.getItem('ce_calc_rows_v4'));
-        if (savedRows && savedRows.length > 0) {
-            savedRows.forEach(s => addRow(s));
-        } else {
-            addRow(); // пустая строка для начала
-        }
+    // ИСПРАВЛЕНО: Ключ изменен на v4 в window.onload
+window.onload = () => {
+    const savedRows = JSON.parse(localStorage.getItem('ce_calc_rows_v4'));
+    if (savedRows && savedRows.length > 0) {
+        savedRows.forEach(s => addRow(s));
+    } else {
+        addRow(); // пустая строка для начала
+    }
+};
     };
 </script>
