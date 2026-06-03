@@ -310,7 +310,6 @@
         { name: "Хладон R32 в одн. баллоне 9,5 кг FEIYUAN", unit: "шт.", price: 11663 },
         { name: "Хладон R 404А в одн. баллоне 10,9 кг ICELOONG", unit: "шт.", price: 15943 },
         { name: "Хладон R-141b, 10 кг", unit: "шт.", price: 21347 },
-        { name: "Масло синтетическое AFROST POE 32 (5л) мет.упак. NEW", unit: "шт.", price: 6999 },
         { name: "Насос вакумный (2-ступ. 51 л/мин) VP 215 (Yangy)", unit: "шт.", price: 9443 },
         { name: "Горелка Т-А (Favorcool)", unit: "шт.", price: 1942 },
         { name: "Труборез СТ-274 (1/8'-1 1/8') (DSZH)", unit: "шт.", price: 460 },
@@ -322,10 +321,8 @@
         { name: "Трубогиб пружинный CT-102-04 1/4' (Favorcool)", unit: "шт.", price: 226 },
         { name: "PROFcool PB4 1/2+5/8 трубогиб внутренний для медных труб 4м", unit: "шт.", price: 2310 },
         { name: "PROFcool PB4 1/4+3/8 трубогиб внутренний для медных труб 4м", unit: "шт.", price: 1305 },
-        { name: "Виброопоры PROFcool VS-2B110", unit: "шт.", price: 738 },
         { name: "PROFcool TAR-20/90 фиксатор угла поворота из полиамида", unit: "шт.", price: 60 },
         { name: "МАПП газ в баллоне (0,4538)", unit: "шт.", price: 653 },
-        { name: "Развальцовочник", unit: "шт.", price: 1017 }
     ];
 
     if (!localStorage.getItem('ce_catalog_v4')) {
