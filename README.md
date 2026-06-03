@@ -465,32 +465,49 @@
     }
 
     function syncPricesFromCatalog() {
-        const rows = document.querySelectorAll('#tableBody tr');
-        let updated = 0;
-        rows.forEach(tr => {
-            const nameInput = tr.querySelector('.name-input');
-            const currentName = nameInput.value.trim();
-            if (!currentName) return;
-            const catalogItem = priceListData.find(item => item.name === currentName);
-            if (catalogItem) {
-                const id = tr.dataset.id;
-                const oldPriceVal = document.getElementById(`price-${id}`).value;
-                const oldUnit = document.getElementById(`unit-${id}`).textContent;
-                const oldPrice = parseNumberSafe(oldPriceVal);
-                if (oldPrice !== catalogItem.price || oldUnit !== catalogItem.unit) {
-                    document.getElementById(`price-${id}`).value = catalogItem.price;
-                    document.getElementById(`unit-${id}`).textContent = catalogItem.unit;
-                    updated++;
-                }
-            }
-        });
-        if (updated > 0) {
-            calculate();
-            alert(`Обновлено позиций: ${updated}. Цены и единицы измерения приведены в соответствие с каталогом.`);
-        } else {
-            alert("Все цены в таблице уже соответствуют каталогу.");
+    // 1. Принудительно обновляем базу данных в памяти актуальным массивом из кода
+    priceListData = JSON.parse(JSON.stringify(initialPriceList));
+    
+    // Перезаписываем localStorage, чтобы старые цены там больше не сидели
+    // ВНИМАНИЕ: Если у тебя в коде используется ключ v3 или v4 — укажи его здесь вместо v4
+    localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
+
+    const rows = document.querySelectorAll('#tableBody tr');
+    let updated = 0;
+
+    rows.forEach(tr => {
+        const nameInput = tr.querySelector('.name-input');
+        // Очищаем имя от лишних пробелов по краям для точного сравнения
+        const currentName = nameInput.value.trim().toLowerCase(); 
+        if (!currentName) return;
+
+        // Ищем товар в коде, игнорируя регистр букв
+        const catalogItem = priceListData.find(item => item.name.trim().toLowerCase() === currentName);
+        
+        if (catalogItem) {
+            const id = tr.dataset.id;
+            const priceInput = document.getElementById(`price-${id}`);
+            const unitCell = document.getElementById(`unit-${id}`);
+
+            // Принудительно записываем новые данные прямо в ячейки
+            priceInput.value = catalogItem.price;
+            unitCell.textContent = catalogItem.unit;
+            
+            // Если менеджер успел выбрать товар, подтягиваем правильное имя из каталога
+            nameInput.value = catalogItem.name; 
+            updated++;
         }
+    });
+
+    // Пересчитываем общую сумму и сохраняем текущие строки
+    calculate();
+    
+    if (updated > 0) {
+        alert(`Успешно обновлено позиций: ${updated}. Все цены и единицы измерения взяты напрямую из свежего кода!`);
+    } else {
+        alert("База данных обновлена. В текущей таблице не найдено совпадений по именам товаров для обновления цен.");
     }
+}
 
     function toggleDbList() {
         const div = document.getElementById('database-list');
