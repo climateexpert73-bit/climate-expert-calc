@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Калькулятор расходных материалов | Климат-Эксперт</title>
-    <style>
+    <title>Калькулятор расходных материалов</title>
+    <style type="text/css">
         :root {
             --primary: #0d47a1;
             --primary-light: #e3f2fd;
@@ -56,7 +56,12 @@
             gap: 10px;
             align-items: flex-end;
         }
-        .table-wrapper { overflow: visible; margin-bottom: 20px; }
+        .table-wrapper { 
+            overflow: visible; 
+            margin-bottom: 20px;
+            height: auto;
+            max-height: none;
+        }
         .calc-table { width: 100%; border-collapse: collapse; }
         .calc-table th {
             background-color: #f8f9fa;
@@ -68,12 +73,9 @@
         }
         .calc-table td { padding: 12px 10px; border-bottom: 1px solid #eee; position: relative; }
         input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
+            width: 100%; 
+            border-collapse: collapse; 
+            overflow: visible;
         }
         .autocomplete-container { position: relative; width: 100%; }
         .suggestions-list {
@@ -171,6 +173,7 @@
     </style>
 </head>
 <body>
+
 <main class="main-container">
     <header>
         <h1>Калькулятор расходных материалов</h1>
@@ -180,9 +183,9 @@
     <section class="catalog-manager">
         <h3 style="margin:0 0 15px 0; font-size: 16px; color: var(--primary);">📦 База данных (каталог)</h3>
         <div class="manager-grid">
-            <div><input id="new-item-name" placeholder="Название товара" type="text"></div>
-            <div><input id="new-item-unit" placeholder="Ед. (м/шт)" type="text"></div>
-            <div><input id="new-item-price" placeholder="Цена" step="0.01" type="number"></div>
+            <div><input id="new-item-name" placeholder="Название товара" type="text" /></div>
+            <div><input id="new-item-unit" placeholder="Ед. (м/шт)" type="text" /></div>
+            <div><input id="new-item-price" placeholder="Цена" step="0.01" type="number" /></div>
             <button class="btn btn-save" onclick="addNewProduct()">Сохранить</button>
             <button class="btn" onclick="toggleDbList()" style="background: #95a5a6; color: white;">Все товары</button>
         </div>
@@ -220,18 +223,19 @@
 </main>
 
 <script>
-    // ---------- 1. КАТАЛОГ (104 позиции, все цены с точкой, дубликаты удалены) ----------
     const initialPriceList = [
-        { name: "Кабель-канал 'РУВИНИЛ' 74х55х2000мм", unit: "м", price: 227 },
-        { name: "Прямой ввод в стену 'РУВИНИЛ' 74х55 мм.", unit: "шт.", price: 135 },
-        { name: "Угол внутренний 'РУВИНИЛ' РКК-74х55", unit: "шт.", price: 127 },
-        { name: "Угол для кабель-канала 'РУВИНИЛ' УВШ-74х55 наружный", unit: "шт.", price: 150 },
-        { name: "Поворот на 90 град. 'РУВИНИЛ' РКК-74х55", unit: "шт.", price: 190 },
-        { name: "Переходник 'РУВИНИЛ' РКК-74х55 соединительный", unit: "шт.", price: 41 },
-        { name: "Ввод в строение РКК-74х55 'РУВИНИЛ'", unit: "шт.", price: 225 },
-        { name: "Заглушка для РКК-74х55 'РУВИНИЛ'", unit: "шт.", price: 110 },
-        { name: "Кабель-канал 100х60 L2000 пластик ЭЛЕКОР IEK", unit: "м", price: 263 },
-        { name: "Кабель канал 16х16 L2000 пластик ЭЛЕКОР IEK", unit: "м", price: 40 },
+        { name: "Кабель-канал 'РУВИНИЛ' 74х55х2000мм", unit: "м", price: 232 },
+        { name: "Прямой ввод в стену 'РУВИНИЛ' 74х55 мм.", unit: "шт.", price: 146 },
+        { name: "Угол внутренний 'РУВИНИЛ' РКК-74х55", unit: "шт.", price: 136 },
+        { name: "Угол для кабель-канала 'РУВИНИЛ' УВШ-74х55 наружный", unit: "шт.", price: 153 },
+        { name: "Поворот на 90 град. 'РУВИНИЛ' РКК-74х55", unit: "шт.", price: 204 },
+        { name: "Поворот гибкий гофрированный для "АРКТИКА" РКК-74х55", unit: "шт.", price: 306 },
+        { name: "Переходник 'РУВИНИЛ' РКК-74х55 соединительный", unit: "шт.", price: 42 },
+        { name: "Ввод в строение РКК-74х55 'РУВИНИЛ'", unit: "шт.", price: 230 },
+        { name: "Заглушка для РКК-74х55 'РУВИНИЛ'", unit: "шт.", price: 112 },
+        { name: "Тройник накладной 90 град. для РКК 74х55 (белый) "РУВИНИЛ"", unit: "шт.", price: 281 },
+        { name: "Кабель-канал 100х60 L2000 plastic ЭЛЕКОР IEK", unit: "м", price: 263 },
+        { name: "Кабель канал 16х16 L2000 plastic ЭЛЕКОР IEK", unit: "м", price: 40 },
         { name: "Медная труба 1/4 ASTM B68 УЗБЕКИСТАН", unit: "м", price: 144 },
         { name: "Медная труба 1/4 ASTM B280 (6,35х0,76)", unit: "м", price: 187 },
         { name: "Медная труба 3/8 ASTM B68 УЗБЕКИСТАН", unit: "м", price: 241 },
@@ -252,7 +256,6 @@
         { name: "Трубка K-FLEX PE 06x012-2 FRIGO", unit: "м", price: 11.5 },
         { name: "Трубка K-FLEX PE 06x015-2 FRIGO", unit: "м", price: 13.6 },
         { name: "Трубка K-FLEX PE 06x018-2 FRIGO", unit: "м", price: 15 },
-        // удалён дубликат 06x022-2 с ценой 16.5, оставлен только с ценой 18.5 (ниже)
         { name: "Трубка K-FLEX PE 06x022-2 FRIGO", unit: "м", price: 18.5 },
         { name: "Пенофол Black Тип C, толщ. 10, шир. 600, дл. 15", unit: "м", price: 255 },
         { name: "Пенофол Black Тип C, толщ. 5, шир. 600, дл. 30", unit: "м", price: 175 },
@@ -277,14 +280,16 @@
         { name: "Траверса монтажная 3000*30*20*0,9", unit: "шт.", price: 267 },
         { name: "Лента перфорированная 20х0,55 прямая (25м)", unit: "шт.", price: 397 },
         { name: "Лента перфорированная CT 20*1,0 (оцинкованная)", unit: "шт.", price: 582 },
-        { name: "Лента для защиты изоляции AVIORA PROFFI 75мм*50м", unit: "шт.", price: 400 },
+        { name: "Лента для защиты термоизоляции 75мм*50м,белая, AVIORA", unit: "шт.", price: 400 },
+        { name: "Лента для защиты термоизоляции 75мм*50м,чёрная, AVIORA", unit: "шт.", price: 558 },
         { name: "Лента самоклеящаяся K-flex (3мм*50мм*15м)", unit: "шт.", price: 746 },
         { name: "Скотч алюминиевый ALT 50", unit: "шт.", price: 146 },
         { name: "Скотч алюминиевый ALT 75", unit: "шт.", price: 233 },
         { name: "Скотч армированный серый", unit: "шт.", price: 375 },
         { name: "Изолента ПВХ 19мм*20м белая", unit: "шт.", price: 76 },
-        { name: "Дренаж гофрированный D 16 мм (30м)", unit: "м", price: 25 },
-        { name: "Дренаж гофрированный D 20 мм (30м)", unit: "м", price: 48.5 },
+        { name: "Дренаж гофрированный D 16 мм (30м)", unit: "шт", price: 785 },
+        { name: "Дренаж гофрированный D 20 мм (30м)", unit: "шт", price: 1456 },
+        { name: "Дренаж гофрированный D 25 мм (30м)", unit: "шт", price: 1999 },
         { name: "Дренаж металлопласт", unit: "м", price: 62 },
         { name: "Шланг капиллярный 6*9 (бухта 50м)", unit: "м", price: 2 },
         { name: "Регулятор давления конденсации РДК-8.4 (РДКК-33)", unit: "шт.", price: 1248 },
@@ -302,43 +307,33 @@
         { name: "Дюбель фасадный KPR-FAST М10*260K с бортом", unit: "шт.", price: 136 },
         { name: "Дюбель фасадный KPR-FAST М12*260K с бортом", unit: "шт.", price: 170 },
         { name: "Дюбель фасадный KPR-FAST М12*300K с бортом", unit: "шт.", price: 204 },
-        { name: "Анкер латунный (цанга) М8", unit: "шт.", price: 9 },
-        { name: "Анкер латунный (цанга) М10", unit: "шт.", price: 14 },
-        { name: "Круг отрезной КО 125*1,2*22", unit: "шт.", price: 25 },
-        { name: "Пена профессиональная огнестойкая всесезонная REDSUN 65 PRO (850мл)", unit: "шт.", price: 621 },
-        { name: "Шуруп сантех.GL8х80(глухарь) 700/50 шт.", unit: "шт.", price: 5 },
-        { name: "Дюбель универсальный (8*72) потайной", unit: "шт.", price: 5 },
-        { name: "Дюбель универсальный 'Рыжий' 6х42 мм", unit: "шт.", price: 2 },
-        { name: "Саморез с пресс-шайбой ПШМ-С 76 х 4.2 мм", unit: "шт.", price: 2 },
+        { name: "Шуруп для лаг (глухарь) 8*80", unit: "шт.", price: 5 },
+        { name: "Дюбель U 12*71 оранж потай", unit: "шт.", price: 2 },
+        { name: "Саморез ПШО 4,2*51 FIXER", unit: "шт.", price: 2 },
         { name: "Хладон R 410А в одн. баллоне 11,3 кг FEIYUAN", unit: "шт.", price: 14873 },
         { name: "Хладон R32 в одн. баллоне 9,5 кг FEIYUAN", unit: "шт.", price: 11663 },
         { name: "Хладон R 404А в одн. баллоне 10,9 кг ICELOONG", unit: "шт.", price: 15943 },
         { name: "Хладон R-141b, 10 кг", unit: "шт.", price: 21347 },
-        { name: "Масло синтетическое AFROST POE 32 (5л) мет.упак. NEW", unit: "шт.", price: 6999 },
         { name: "Насос вакумный (2-ступ. 51 л/мин) VP 215 (Yangy)", unit: "шт.", price: 9443 },
         { name: "Горелка Т-А (Favorcool)", unit: "шт.", price: 1942 },
         { name: "Труборез СТ-274 (1/8'-1 1/8') (DSZH)", unit: "шт.", price: 460 },
         { name: "Труборез WK-428 (3/16'-3/18') (DSZH)", unit: "шт.", price: 460 },
         { name: "Трубогиб пружинный СТ-102-12 3/4 (Favorcool)", unit: "шт.", price: 384 },
-        { name: "Трубогиб пружинный СТ-102-10 5/8 (Favorcool)", unit: "шт.", price: 358 },
-        { name: "Трубогиб пружинный СТ-102-06 3/8 (Favorcool)", unit: "шт.", price: 292 },
-        { name: "Трубогиб пружинный СТ-102-08 1/2 (Favorcool)", unit: "шт.", price: 317 },
-        { name: "Трубогиб пружинный CT-102-04 1/4' (Favorcool)", unit: "шт.", price: 226 },
+        { name: "Трубогиб пружинный СТ-102-10 5/8 (Favorcool)", unit: "шт.", price: 344 },
+        { name: "Трубогиб пружинный СТ-102-06 3/8 (Favorcool)", unit: "шт.", price: 275 },
+        { name: "Трубогиб пружинный СТ-102-08 1/2 (Favorcool)", unit: "шт.", price: 340 },
+        { name: "Трубогиб пружинный CT-102-04 1/4' (Favorcool)", unit: "шт.", price: 123 },
         { name: "PROFcool PB4 1/2+5/8 трубогиб внутренний для медных труб 4м", unit: "шт.", price: 2310 },
         { name: "PROFcool PB4 1/4+3/8 трубогиб внутренний для медных труб 4м", unit: "шт.", price: 1305 },
-        { name: "Виброопоры PROFcool VS-2B110", unit: "шт.", price: 738 },
         { name: "PROFcool TAR-20/90 фиксатор угла поворота из полиамида", unit: "шт.", price: 60 },
         { name: "МАПП газ в баллоне (0,4538)", unit: "шт.", price: 653 },
-        { name: "Развальцовочник", unit: "шт.", price: 1017 }
     ];
 
-    // инициализация локального хранилища для каталога (при первом запуске)
-    if (!localStorage.getItem('ce_catalog_v3')) {
-        localStorage.setItem('ce_catalog_v3', JSON.stringify(initialPriceList));
+    if (!localStorage.getItem('ce_catalog_v4')) {
+        localStorage.setItem('ce_catalog_v4', JSON.stringify(initialPriceList));
     }
-    let priceListData = JSON.parse(localStorage.getItem('ce_catalog_v3'));
+    let priceListData = JSON.parse(localStorage.getItem('ce_catalog_v4'));
 
-    // вспомогательная функция для безопасного преобразования строки в число (замена запятой)
     function parseNumberSafe(val) {
         if (val === undefined || val === null) return 0;
         let str = String(val).trim().replace(',', '.');
@@ -346,12 +341,10 @@
         return isNaN(num) ? 0 : num;
     }
 
-    // сохранение каталога
     function saveCatalogToLocal() {
-        localStorage.setItem('ce_catalog_v3', JSON.stringify(priceListData));
+        localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
     }
 
-    // сохранение строк таблицы
     function saveRowsToLocal() {
         const rows = [];
         document.querySelectorAll('#tableBody tr').forEach(tr => {
@@ -365,10 +358,9 @@
                 });
             }
         });
-        localStorage.setItem('ce_calc_rows_v3', JSON.stringify(rows));
+        localStorage.setItem('ce_calc_rows_v4', JSON.stringify(rows));
     }
 
-    // пересчёт итогов
     function calculate() {
         let grand = 0;
         document.querySelectorAll('#tableBody tr').forEach(tr => {
@@ -383,7 +375,6 @@
         saveRowsToLocal();
     }
 
-    // автокомплит
     function handleSearch(id, query) {
         const listDiv = document.getElementById(`list-${id}`);
         listDiv.innerHTML = '';
@@ -413,7 +404,6 @@
         calculate();
     }
 
-    // добавление строки (с возможностью восстановления сохранённой)
     function addRow(saved = null) {
         const id = 'id' + Math.random().toString(36).substr(2, 9);
         const tr = document.createElement('tr');
@@ -451,7 +441,6 @@
         } 
     }
 
-    // добавление/обновление товара в каталоге
     function addNewProduct() {
         let name = document.getElementById('new-item-name').value.trim();
         let unit = document.getElementById('new-item-unit').value.trim() || 'шт.';
@@ -476,36 +465,51 @@
         document.getElementById('new-item-price').value = '';
     }
 
-    // синхронизация цен и единиц в таблице по текущему каталогу
     function syncPricesFromCatalog() {
-        const rows = document.querySelectorAll('#tableBody tr');
-        let updated = 0;
-        rows.forEach(tr => {
-            const nameInput = tr.querySelector('.name-input');
-            const currentName = nameInput.value.trim();
-            if (!currentName) return;
-            const catalogItem = priceListData.find(item => item.name === currentName);
-            if (catalogItem) {
-                const id = tr.dataset.id;
-                const oldPriceVal = document.getElementById(`price-${id}`).value;
-                const oldUnit = document.getElementById(`unit-${id}`).textContent;
-                const oldPrice = parseNumberSafe(oldPriceVal);
-                if (oldPrice !== catalogItem.price || oldUnit !== catalogItem.unit) {
-                    document.getElementById(`price-${id}`).value = catalogItem.price;
-                    document.getElementById(`unit-${id}`).textContent = catalogItem.unit;
-                    updated++;
-                }
-            }
-        });
-        if (updated > 0) {
-            calculate();
-            alert(`Обновлено позиций: ${updated}. Цены и единицы измерения приведены в соответствие с каталогом.`);
-        } else {
-            alert("Все цены в таблице уже соответствуют каталогу.");
-        }
-    }
+    // 1. Принудительно обновляем базу данных в памяти актуальным массивом из кода
+    priceListData = JSON.parse(JSON.stringify(initialPriceList));
+    
+    // Перезаписываем localStorage, чтобы старые цены там больше не сидели
+    // ВНИМАНИЕ: Если у тебя в коде используется ключ v3 или v4 — укажи его здесь вместо v4
+    localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
 
-    // отображение / редактирование каталога
+    const rows = document.querySelectorAll('#tableBody tr');
+    let updated = 0;
+
+    rows.forEach(tr => {
+        const nameInput = tr.querySelector('.name-input');
+        // Очищаем имя от лишних пробелов по краям для точного сравнения
+        const currentName = nameInput.value.trim().toLowerCase(); 
+        if (!currentName) return;
+
+        // Ищем товар в коде, игнорируя регистр букв
+        const catalogItem = priceListData.find(item => item.name.trim().toLowerCase() === currentName);
+        
+        if (catalogItem) {
+            const id = tr.dataset.id;
+            const priceInput = document.getElementById(`price-${id}`);
+            const unitCell = document.getElementById(`unit-${id}`);
+
+            // Принудительно записываем новые данные прямо в ячейки
+            priceInput.value = catalogItem.price;
+            unitCell.textContent = catalogItem.unit;
+            
+            // Если менеджер успел выбрать товар, подтягиваем правильное имя из каталога
+            nameInput.value = catalogItem.name; 
+            updated++;
+        }
+    });
+
+    // Пересчитываем общую сумму и сохраняем текущие строки
+    calculate();
+    
+    if (updated > 0) {
+        alert(`Успешно обновлено позиций: ${updated}. Все цены и единицы измерения взяты напрямую из свежего кода!`);
+    } else {
+        alert("База данных обновлена. В текущей таблице не найдено совпадений по именам товаров для обновления цен.");
+    }
+}
+
     function toggleDbList() {
         const div = document.getElementById('database-list');
         if (div.style.display === 'block') {
@@ -559,7 +563,6 @@
         }
     }
 
-    // вспомогательная функция для экранирования HTML
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -567,12 +570,9 @@
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
             return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
         });
     }
 
-    // копирование в буфер
     function copyToClipboard() {
         let text = "🏢 Калькулятор материалов «Климат-Эксперт»\n\n";
         let hasData = false;
@@ -593,22 +593,21 @@
         alert("Расчёт скопирован в буфер обмена!");
     }
 
-    // закрытие автокомплита при клике вне
     document.addEventListener('click', (e) => {
         if (!e.target.classList || !e.target.classList.contains('name-input')) {
             document.querySelectorAll('.suggestions-list').forEach(l => l.style.display = 'none');
         }
     });
 
-    // загрузка сохранённых строк при старте
     window.onload = () => {
-        const savedRows = JSON.parse(localStorage.getItem('ce_calc_rows_v3'));
+        const savedRows = JSON.parse(localStorage.getItem('ce_calc_rows_v4'));
         if (savedRows && savedRows.length > 0) {
             savedRows.forEach(s => addRow(s));
         } else {
-            addRow(); // пустая строка для начала
+            addRow();
         }
     };
 </script>
+
 </body>
 </html>
