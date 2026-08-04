@@ -223,6 +223,7 @@
 </main>
 
 <script>
+    // Начальный каталог (эталон)
     const initialPriceList = [
         { name: "Кабель-канал 'РУВИНИЛ' 74х55х2000мм", unit: "м", price: 271 },
         { name: "Прямой ввод в стену 'РУВИНИЛ' 74х55 мм.", unit: "шт.", price: 162 },
@@ -330,11 +331,27 @@
         { name: "МАПП газ в баллоне (0,4538)", unit: "шт.", price: 653 },
     ];
 
-    if (!localStorage.getItem('ce_catalog_v4')) {
-        localStorage.setItem('ce_catalog_v4', JSON.stringify(initialPriceList));
+    // === Инициализация каталога с защитой от битых данных ===
+    let priceListData;
+    try {
+        const stored = localStorage.getItem('ce_catalog_v4');
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length) {
+                priceListData = parsed;
+            } else {
+                throw new Error('Каталог пуст или не массив');
+            }
+        } else {
+            throw new Error('Нет данных');
+        }
+    } catch (e) {
+        console.warn('Ошибка чтения каталога, загружаем начальный список', e);
+        priceListData = initialPriceList.slice(); // копия
+        localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
     }
-    let priceListData = JSON.parse(localStorage.getItem('ce_catalog_v4'));
 
+    // === Вспомогательные функции ===
     function parseNumberSafe(val) {
         if (val === undefined || val === null) return 0;
         let str = String(val).trim().replace(',', '.');
@@ -362,6 +379,7 @@
         localStorage.setItem('ce_calc_rows_v4', JSON.stringify(rows));
     }
 
+    // === Основные функции ===
     function calculate() {
         let grand = 0;
         document.querySelectorAll('#tableBody tr').forEach(tr => {
@@ -466,38 +484,32 @@
         document.getElementById('new-item-price').value = '';
     }
 
+    // Исправленная синхронизация – использует текущий каталог, не перезаписывает его
     function syncPricesFromCatalog() {
-        priceListData = JSON.parse(JSON.stringify(initialPriceList));
-        localStorage.setItem('ce_catalog_v4', JSON.stringify(priceListData));
-
         const rows = document.querySelectorAll('#tableBody tr');
         let updated = 0;
 
         rows.forEach(tr => {
             const nameInput = tr.querySelector('.name-input');
-            const currentName = nameInput.value.trim().toLowerCase(); 
+            const currentName = nameInput.value.trim().toLowerCase();
             if (!currentName) return;
 
+            // Ищем в текущем каталоге (priceListData), а не в initialPriceList
             const catalogItem = priceListData.find(item => item.name.trim().toLowerCase() === currentName);
-            
             if (catalogItem) {
                 const id = tr.dataset.id;
-                const priceInput = document.getElementById(`price-${id}`);
-                const unitCell = document.getElementById(`unit-${id}`);
-
-                priceInput.value = catalogItem.price;
-                unitCell.textContent = catalogItem.unit;
-                nameInput.value = catalogItem.name; 
+                document.getElementById(`price-${id}`).value = catalogItem.price;
+                document.getElementById(`unit-${id}`).textContent = catalogItem.unit;
+                nameInput.value = catalogItem.name; // обновляем имя (регистр)
                 updated++;
             }
         });
 
         calculate();
-        
         if (updated > 0) {
-            alert(`Успешно обновлено позиций: ${updated}. Все цены и единицы измерения взяты напрямую из свежего кода!`);
+            alert(`Обновлено позиций: ${updated}. Цены и единицы синхронизированы с текущим каталогом.`);
         } else {
-            alert("База данных обновлена. В текущей таблице не найдено совпадений по именам товаров для обновления цен.");
+            alert("Не найдено совпадений. Возможно, названия товаров в таблице не совпадают с каталогом.");
         }
     }
 
@@ -584,18 +596,31 @@
         alert("Расчёт скопирован в буфер обмена!");
     }
 
+    // === Закрытие списка подсказок при клике вне поля ===
     document.addEventListener('click', (e) => {
         if (!e.target.classList || !e.target.classList.contains('name-input')) {
             document.querySelectorAll('.suggestions-list').forEach(l => l.style.display = 'none');
         }
     });
 
+    // === Загрузка сохранённых строк при старте ===
     window.onload = () => {
-        const savedRows = JSON.parse(localStorage.getItem('ce_calc_rows_v4'));
+        let savedRows = [];
+        try {
+            const stored = localStorage.getItem('ce_calc_rows_v4');
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed)) savedRows = parsed;
+            }
+        } catch (e) {
+            console.warn('Ошибка чтения сохранённых строк, начинаем с пустой таблицы', e);
+            savedRows = [];
+        }
+
         if (savedRows && savedRows.length > 0) {
             savedRows.forEach(s => addRow(s));
         } else {
-            addRow();
+            addRow(); // одна пустая строка по умолчанию
         }
     };
 </script>
